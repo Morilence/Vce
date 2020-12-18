@@ -41,5 +41,5 @@ npm i css-loader style-loader style-resources-loader -D
 ```
 
 ```cmd
-npm install babel-plugin-import iview-loader -D
+npm i babel-plugin-import iview-loader -D
 ```
