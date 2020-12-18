@@ -1,4 +1,4 @@
-const path = require("path");
+// const path = require("path");
 
 module.exports = {
     publicPath: "./",
@@ -32,6 +32,21 @@ module.exports = {
         extract: false,
         sourceMap: false
     },
+
+    chainWebpack: config => {
+        config.module
+            .rule("vue")
+            .test(/\.vue$/)
+            .use("vue-loader")
+            .loader("vue-loader")
+            .end()
+            .use("iview-loader")
+            .loader("iview-loader")
+            .options({
+                prefix: true
+            })
+            .end();
+    }
 
     // chainWebpack: config => {
     //     config.module

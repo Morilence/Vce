@@ -39,6 +39,12 @@ Vue.use(vuescroll, {
     }
 });
 
+// iview
+import { Tabs, Tree } from "view-design";
+import "view-design/dist/styles/iview.css";
+Vue.component("Tabs", Tabs);
+Vue.component("Table", Tree);
+
 new Vue({
     router,
     store,
