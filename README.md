@@ -1,29 +1,11 @@
 # vce
 
-## Project setup
-```
-npm install
-```
+## dependencies
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+npm i css-vars-ponyfill normalize.css vuescroll -S
 
-### Compiles and minifies for production
-```
-npm run build
-```
+npm i @fortawesome/vue-fontawesome @fortawesome/pro-solid-svg-icons @fortawesome/pro-regular-svg-icons @fortawesome/pro-light-svg-icons @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icons @fortawesome/fontawesome-svg-core -S
 
-### Run your tests
-```
-npm run test
-```
+## devDependencies
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+npm i css-loader style-loader style-resources-loader -D
