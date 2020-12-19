@@ -1,15 +1,15 @@
 <template>
-    <header id="title-bar"></header>
+    <footer id="status-bar"></footer>
 </template>
 
 <script>
 export default {
-    name: "TitleBar"
+    name: "StatusBar"
 };
 </script>
 
-<style lang="stylus" scoped>
-#title-bar
+<style lang="stylus">
+#status-bar
     width 100%
     height 100%
 </style>

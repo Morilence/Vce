@@ -6,14 +6,20 @@
 import Ace from "ace-builds";
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/ext-language_tools";
-import "@convergencelabs/ace-collab-ext/css/ace-collab-ext.min.css";
 export default {
     name: "AceEditor",
+    props: {
+        mode: {
+            type: String,
+            default: null
+        },
+        commonOptions: {
+            type: Object,
+            default: () => {}
+        }
+    },
     data() {
-        return {
-            mode: null,
-            commonOptions: this.$store.state.config.editorCommonOptions
-        };
+        return {};
     },
     computed: {
         options: {
@@ -50,4 +56,6 @@ export default {
     width 100%
     min-width 300px
     height 100%
+
+    user-select none
 </style>

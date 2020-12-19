@@ -2,21 +2,21 @@
     <vue-scroll>
         <div id="app">
             <title-bar />
-            <ace-editor />
+            <main-wrapper />
             <status-bar />
         </div>
     </vue-scroll>
 </template>
 
 <script>
-import TitleBar from "./components/TitleBar.vue";
-import AceEditor from "./components/AceEditor.vue";
-import StatusBar from "./components/StatusBar.vue";
+import TitleBar from "./components/TitleBar";
+import MainWrapper from "./components/MainWrapper";
+import StatusBar from "./components/StatusBar";
 export default {
     name: "App",
     components: {
         TitleBar,
-        AceEditor,
+        MainWrapper,
         StatusBar
     },
     methods: {
@@ -53,7 +53,7 @@ body
     position relative
 
     width 100vw
-    min-width 1080px
+    min-width 520px
     height 100vh
     min-height 480px
     box-sizing border-box

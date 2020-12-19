@@ -26,7 +26,8 @@ export default new Vuex.Store({
                 children: [],
                 content: ``
             }
-        ]
+        ],
+        currentFileInfo: {}
     },
     mutations: {
         setConfig(state, cfg) {
@@ -40,6 +41,13 @@ export default new Vuex.Store({
         setProject(state, proj) {
             state.project = proj;
             localStorage.setItem("project", JSON.stringify(state.project));
+        },
+        setCurrentFileInfo(state, info) {
+            for (let prop in info) {
+                if (Object.prototype.hasOwnProperty.call(state.currentFileInfo, prop)) {
+                    state.currentFileInfo[prop] = info[prop];
+                }
+            }
         }
     },
     actions: {},
