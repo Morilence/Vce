@@ -1,7 +1,7 @@
 <template>
     <div id="project-viewer">
         <file-explorer ref="fexplr" />
-        <div ref="sash" class="sash" @mousedown="enableSash()"></div>
+        <div ref="sash" class="sash" @mousedown.self="enableSash()"></div>
         <file-displayer ref="fdiplr" />
     </div>
 </template>
@@ -24,10 +24,10 @@ export default {
         enableSash() {
             this.$refs.fexplr.$el.style.pointerEvents = "null";
             this.$refs.fdiplr.$el.style.pointerEvents = "null";
-            this.isSashActivated = !this.isSashActivated ? true : false;
+            this.isSashActivated = true;
         },
         disableSash() {
-            this.isSashActivated = this.isSashActivated ? false : true;
+            this.isSashActivated = false;
             this.$refs.fexplr.$el.style.pointerEvents = "auto";
             this.$refs.fdiplr.$el.style.pointerEvents = "auto";
         },
