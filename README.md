@@ -31,7 +31,7 @@ npm i ace-builds -S
 ```
 
 ```cmd
-npm install view-design -S
+npm i view-design -S
 ```
 
 ## DevDependencies
