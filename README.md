@@ -4,7 +4,7 @@
 
 基于Ace的单项目级在线编辑器
 
-## Preview
+## Preview (in development)
 
 [https://morilence.github.io/Vce/](https://morilence.github.io/Vce/)
 
