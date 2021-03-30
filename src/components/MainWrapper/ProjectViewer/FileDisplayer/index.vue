@@ -1,6 +1,10 @@
 <template>
     <div id="file-displayer">
-        <ace-editor :mode="'ace/mode/html'" :commonOptions="$store.state.config.editorCommonOptions" />
+        <ace-editor
+            :cursor="$store.state.cursor"
+            :mode="'ace/mode/html'"
+            :commonOptions="$store.state.config.editorCommonOptions"
+        />
     </div>
 </template>
 

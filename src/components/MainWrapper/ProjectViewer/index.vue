@@ -22,23 +22,26 @@ export default {
     },
     methods: {
         enableSash() {
+            this.isSashActivated = true;
             this.$refs.fexplr.$el.style.pointerEvents = "null";
             this.$refs.fdiplr.$el.style.pointerEvents = "null";
-            this.isSashActivated = true;
+            this.$store.commit("setCursor", "col-resize");
         },
         disableSash() {
             this.isSashActivated = false;
             this.$refs.fexplr.$el.style.pointerEvents = "auto";
             this.$refs.fdiplr.$el.style.pointerEvents = "auto";
+            this.$store.commit("setCursor", "auto");
         },
         slide(evt) {
             if (this.isSashActivated) {
-                let distanceToPageLeft = evt.clientX;
+                let distanceToViewportLeft = evt.clientX;
                 let activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
-                if (distanceToPageLeft > activityBarWidth + 170 && distanceToPageLeft < window.innerWidth - 300) {
-                    this.$refs.sash.style.left = `${distanceToPageLeft - activityBarWidth}px`;
-                    this.$refs.fexplr.$el.style.minWidth = `${distanceToPageLeft - activityBarWidth}px`;
-                }
+                let diff = distanceToViewportLeft - activityBarWidth;
+                if (diff < 170) diff = 170;
+                if (distanceToViewportLeft > window.innerWidth - 300) diff = window.innerWidth - 300 - activityBarWidth;
+                this.$refs.sash.style.left = `${diff}px`;
+                this.$refs.fexplr.$el.style.width = `${diff}px`;
             }
         }
     },
@@ -68,7 +71,7 @@ export default {
     .sash
         position absolute
         top 0
-        left 170px
+        left 200px
 
         width 6px
         height 100%
@@ -79,7 +82,8 @@ export default {
         z-index 10
 
     #file-explorer
-        flex 0 0 0
+        flex-shrink 0
+        width 200px
         min-width 170px
 
     #file-displayer

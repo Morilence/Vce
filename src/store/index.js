@@ -6,6 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        // cursor style
+        cursor: "auto",
         config: {
             lang: null,
             editorCommonOptions: {
@@ -30,6 +32,9 @@ export default new Vuex.Store({
         currentFileInfo: {}
     },
     mutations: {
+        setCursor(state, style) {
+            state.cursor = style;
+        },
         setConfig(state, cfg) {
             for (let prop in cfg) {
                 if (Object.prototype.hasOwnProperty.call(state.config, prop)) {

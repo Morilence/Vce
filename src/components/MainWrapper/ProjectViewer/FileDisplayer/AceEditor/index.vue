@@ -9,6 +9,10 @@ import "ace-builds/src-noconflict/ext-language_tools";
 export default {
     name: "AceEditor",
     props: {
+        cursor: {
+            type: String,
+            default: "auto"
+        },
         mode: {
             type: String,
             default: null
@@ -34,6 +38,17 @@ export default {
     },
     methods: {},
     watch: {
+        cursor: {
+            handler(newVal) {
+                if (newVal == "auto") {
+                    this.$el.querySelector(".ace_gutter").style.cursor = "default";
+                    this.$el.querySelector(".ace_scroller").style.cursor = "text";
+                } else {
+                    this.$el.querySelector(".ace_gutter").style.cursor = newVal;
+                    this.$el.querySelector(".ace_scroller").style.cursor = newVal;
+                }
+            }
+        },
         options: {
             handler() {
                 this.ace.setOptions(this.options);

@@ -1,6 +1,6 @@
 <template>
     <vue-scroll>
-        <div id="app">
+        <div id="app" :style="{ cursor: $store.state.cursor }">
             <title-bar />
             <main-wrapper />
             <status-bar />
