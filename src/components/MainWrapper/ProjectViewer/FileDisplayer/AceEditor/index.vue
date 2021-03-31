@@ -3,6 +3,7 @@
 </template>
 
 <script>
+/* eslint-disable indent */
 import Ace from "ace-builds";
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/ext-language_tools";
@@ -40,12 +41,18 @@ export default {
     watch: {
         cursor: {
             handler(newVal) {
-                if (newVal == "auto") {
-                    this.$el.querySelector(".ace_gutter").style.cursor = "default";
-                    this.$el.querySelector(".ace_scroller").style.cursor = "text";
-                } else {
-                    this.$el.querySelector(".ace_gutter").style.cursor = newVal;
-                    this.$el.querySelector(".ace_scroller").style.cursor = newVal;
+                switch (newVal) {
+                    case "col-resize":
+                        this.$el.querySelector(".ace_gutter").style.pointerEvents = "none";
+                        this.$el.querySelector(".ace_gutter-layer").style.pointerEvents = "none";
+                        this.$el.querySelector(".ace_scroller").style.pointerEvents = "none";
+                        break;
+                    case "auto":
+                    default:
+                        this.$el.querySelector(".ace_gutter").style.pointerEvents = "auto";
+                        this.$el.querySelector(".ace_gutter-layer").style.pointerEvents = "auto";
+                        this.$el.querySelector(".ace_scroller").style.pointerEvents = "auto";
+                        break;
                 }
             }
         },

@@ -11,8 +11,19 @@ import "normalize.css/normalize.css";
 // fontawesome
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+    faCaretRight as fasCaretRight,
+    faCaretDown as fasCaretDown,
+    faFile as fasFile,
+    faFolder as fasFolder,
+    faFolderOpen as fasFolderOpen
+} from "@fortawesome/free-solid-svg-icons";
 Vue.component("font-awesome-icon", FontAwesomeIcon);
-library.add();
+library.add(fasCaretRight);
+library.add(fasCaretDown);
+library.add(fasFile);
+library.add(fasFolder);
+library.add(fasFolderOpen);
 
 // vue-scroll
 import vuescroll from "vuescroll";
@@ -40,10 +51,16 @@ Vue.use(vuescroll, {
 });
 
 // iview
-import { Tabs, Tree } from "view-design";
-import "view-design/dist/styles/iview.css";
-Vue.component("Tabs", Tabs);
-Vue.component("Table", Tree);
+// import { Tabs, Tree } from "view-design";
+// import "view-design/dist/styles/iview.css";
+// Vue.component("Tabs", Tabs);
+// Vue.component("Table", Tree);
+
+// custom components
+import FList from "./components/MainWrapper/ProjectViewer/FileExplorer/FList";
+import FItem from "./components/MainWrapper/ProjectViewer/FileExplorer/FItem";
+Vue.component("FList", FList);
+Vue.component("FItem", FItem);
 
 new Vue({
     router,

@@ -1,7 +1,7 @@
 <template>
     <div id="project-viewer">
         <file-explorer ref="fexplr" />
-        <div ref="sash" class="sash" @mousedown.self="enableSash()"></div>
+        <div ref="sash" :class="{ sash: true, active: isSashActivated }" @mousedown.self="enableSash()"></div>
         <file-displayer ref="fdiplr" />
     </div>
 </template>
@@ -73,13 +73,17 @@ export default {
         top 0
         left 200px
 
-        width 6px
+        width 4.5px
         height 100%
-        transform translateX(-3px)
+        transform translateX(-50%)
+        transition background-color 0.3s
 
         cursor col-resize
         user-select none
         z-index 10
+
+        &.active
+            background-color rgba(0, 122, 204, 0.8)
 
     #file-explorer
         flex-shrink 0
