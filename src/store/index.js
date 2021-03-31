@@ -8,6 +8,9 @@ export default new Vuex.Store({
     state: {
         config: {
             lang: null,
+            fileExplorerOptions: {
+                indent: 11
+            },
             editorCommonOptions: {
                 // session options
                 tabSize: 4,
@@ -127,7 +130,7 @@ export default new Vuex.Store({
             localStorage.setItem("project", JSON.stringify(state.project));
         },
         setCurrentActiveItem(state, item) {
-            state.currentActiveItem = JSON.parse(JSON.stringify(item));
+            state.currentActiveItem = item;
         }
     },
     actions: {},

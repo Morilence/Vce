@@ -10,6 +10,7 @@
 
 <script>
 /* eslint-disable indent */
+import exttable from "@/store/exttable";
 import AceEditor from "./AceEditor";
 export default {
     name: "FileDisplayer",
@@ -20,18 +21,10 @@ export default {
         mode: {
             get() {
                 if (this.$store.state.currentActiveItem && !this.$store.state.currentActiveItem.isdir) {
-                    switch (this.$store.state.currentActiveItem.name.split(".").pop()) {
-                        case "html":
-                            return "ace/mode/html";
-                        case "css":
-                            return "ace/mode/css";
-                        case "js":
-                            return "ace/mode/javascript";
-                        default:
-                            return "ace/mode/text";
-                    }
+                    const ext = this.$store.state.currentActiveItem.name.split(".").pop();
+                    return exttable[ext].mode;
                 } else {
-                    return `ace/mode/text`;
+                    return exttable["txt"].mode;
                 }
             }
         }

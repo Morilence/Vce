@@ -1,22 +1,35 @@
 <template>
-    <div :class="{ fitem: true, folded: isFolded }">
+    <div
+        v-if="item.isdir"
+        :class="{ fitem: true, dir: true, folded: isFolded, active: item == $store.state.currentActiveItem }"
+    >
         <div
             class="flabel"
             :style="{
-                paddingLeft: `${(layer + 1) * 10}px`,
+                paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.indent}px`,
                 pointerEvents: $store.state.cursor == 'col-resize' ? 'none' : 'auto'
             }"
             @click="onItemClick(item)"
         >
-            <font-awesome-icon v-if="item.isdir" class="farrow" :icon="['fas', 'caret-right']" />
-            <span v-else class="farrow"></span>
-            <font-awesome-icon
-                class="ficon "
-                :icon="['fas', item.isdir ? (isFolded ? 'folder' : 'folder-open') : 'file']"
-            />
+            <font-awesome-icon class="farrow" :icon="['fas', 'caret-right']" />
+            <font-awesome-icon class="ficon " :icon="['fas', isFolded ? 'folder' : 'folder-open']" />
             <span class="fname">{{ item.name }}</span>
         </div>
-        <f-list v-if="item.children" :layer="layer + 1" :list="item.children" />
+        <f-list :layer="layer + 1" :list="item.children" />
+    </div>
+    <div v-else :class="{ fitem: true, file: true, active: item == $store.state.currentActiveItem }">
+        <div
+            class="flabel"
+            :style="{
+                paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.indent}px`,
+                pointerEvents: $store.state.cursor == 'col-resize' ? 'none' : 'auto'
+            }"
+            @click="onItemClick(item)"
+        >
+            <span class="farrow"></span>
+            <font-awesome-icon class="ficon " :icon="['fas', 'file']" />
+            <span class="fname">{{ item.name }}</span>
+        </div>
     </div>
 </template>
 
@@ -99,10 +112,14 @@ export default {
         &:hover
             background-color #fff
 
-    &.folded
+    &.dir.folded
         .farrow
             transform rotate(0deg)
 
         .flist
             display none
+
+    &.active
+        & > .flabel
+            background-color #fff
 </style>
