@@ -91,6 +91,6 @@ export default {
         min-width 170px
 
     #file-displayer
-        flex 1 0 0
+        // flex 1 0 0
         min-width 300px
 </style>

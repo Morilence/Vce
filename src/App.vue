@@ -1,6 +1,6 @@
 <template>
     <vue-scroll>
-        <div id="app" :style="{ cursor: $store.state.cursor }">
+        <div id="app" ref="app" :style="{ cursor: $store.state.cursor }">
             <title-bar />
             <main-wrapper />
             <status-bar />
@@ -12,6 +12,7 @@
 import TitleBar from "./components/TitleBar";
 import MainWrapper from "./components/MainWrapper";
 import StatusBar from "./components/StatusBar";
+import cssvar from "./style/cssvar";
 export default {
     name: "App",
     components: {
@@ -35,6 +36,7 @@ export default {
         // init(after all components are mounted)
         this.readLocalConfig();
         this.readLocalProject();
+        cssvar.set(this.$refs.app);
     }
 };
 </script>
@@ -58,6 +60,9 @@ body
     min-height 480px
     box-sizing border-box
 
+    overflow hidden
+
+    color @css{rgb(var(--primary_text_rgb))}
     font-family Avenir, Helvetica, Arial, sans-serif
     -webkit-font-smoothing antialiased
     -moz-osx-font-smoothing grayscale

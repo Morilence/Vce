@@ -1,12 +1,12 @@
 <template>
-    <div
+    <li
         v-if="item.isdir"
         :class="{ fitem: true, dir: true, folded: isFolded, active: item == $store.state.currentActiveItem }"
     >
         <div
             class="flabel"
             :style="{
-                paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.indent}px`,
+                paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.itemIndentStep}px`,
                 pointerEvents: $store.state.cursor == 'col-resize' ? 'none' : 'auto'
             }"
             @click="onItemClick(item)"
@@ -16,24 +16,25 @@
             <span class="fname">{{ item.name }}</span>
         </div>
         <f-list :layer="layer + 1" :list="item.children" />
-    </div>
-    <div v-else :class="{ fitem: true, file: true, active: item == $store.state.currentActiveItem }">
+    </li>
+    <li v-else :class="{ fitem: true, file: true, active: item == $store.state.currentActiveItem }">
         <div
             class="flabel"
             :style="{
-                paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.indent}px`,
+                paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.itemIndentStep}px`,
                 pointerEvents: $store.state.cursor == 'col-resize' ? 'none' : 'auto'
             }"
             @click="onItemClick(item)"
         >
             <span class="farrow"></span>
-            <font-awesome-icon class="ficon " :icon="['fas', 'file']" />
+            <font-awesome-icon class="ficon " :icon="icon(item.name)" />
             <span class="fname">{{ item.name }}</span>
         </div>
-    </div>
+    </li>
 </template>
 
 <script>
+import exttable from "@/store/exttable";
 export default {
     name: "fitem",
     props: {
@@ -53,6 +54,15 @@ export default {
             isFolded: true
         };
     },
+    computed: {
+        icon: {
+            get() {
+                return fileName => {
+                    return exttable[fileName.split(".").pop()].ficon;
+                };
+            }
+        }
+    },
     methods: {
         // handlers
         onItemClick(item) {
@@ -71,6 +81,7 @@ export default {
 .fitem
     width 100%
     box-sizing border-box
+    list-style none
     white-space nowrap
 
     .flabel
@@ -110,7 +121,7 @@ export default {
             font-size 14px
 
         &:hover
-            background-color #fff
+            background-color rgba(255, 255, 255, 0.45)
 
     &.dir.folded
         .farrow

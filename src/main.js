@@ -15,6 +15,7 @@ import {
     faCaretRight as fasCaretRight,
     faCaretDown as fasCaretDown,
     faFile as fasFile,
+    faFileImage as fasFileImage,
     faFolder as fasFolder,
     faFolderOpen as fasFolderOpen
 } from "@fortawesome/free-solid-svg-icons";
@@ -22,6 +23,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 library.add(fasCaretRight);
 library.add(fasCaretDown);
 library.add(fasFile);
+library.add(fasFileImage);
 library.add(fasFolder);
 library.add(fasFolderOpen);
 

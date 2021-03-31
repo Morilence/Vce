@@ -1,7 +1,7 @@
 <template>
-    <div id="file-explorer">
-        <f-item class="root" ref="root" :layer="0" :item="proj" />
-    </div>
+    <ul id="file-explorer">
+        <f-item class="root" ref="root" :layer="0" :item="this.$store.state.project" />
+    </ul>
 </template>
 
 <script>
@@ -9,16 +9,9 @@
 export default {
     name: "FileExplorer",
     data() {
-        return {
-            proj: {
-                name: "Untitled",
-                isdir: true,
-                children: []
-            }
-        };
+        return {};
     },
     mounted() {
-        this.proj = this.$store.state.project;
         this.$refs.root.toggleFoldedState();
     }
 };
@@ -29,6 +22,7 @@ export default {
     position relative
 
     height 100%
+    padding-left 0
     background-color rgb(245, 245, 245)
 
     overflow hidden
@@ -39,8 +33,6 @@ export default {
         & > .flabel
             padding 8px 0
 
-            // border-top 1px solid rgb(240, 240, 240)
-            // border-bottom 1px solid rgb(240, 240, 240)
             background-color transparent
             font-weight bold
 
