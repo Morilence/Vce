@@ -55,7 +55,7 @@ body
     position relative
 
     width 100vw
-    min-width 520px
+    min-width 518px
     height 100vh
     min-height 480px
     box-sizing border-box

@@ -10,6 +10,8 @@ export default {
 
 <style lang="stylus">
 #activity-bar
+    flex-shrink 0
+
     width 48px
     height 100%
 </style>

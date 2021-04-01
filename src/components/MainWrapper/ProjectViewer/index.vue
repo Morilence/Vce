@@ -35,23 +35,41 @@ export default {
         },
         slide(evt) {
             if (this.isSashActivated) {
-                let distanceToViewportLeft = evt.clientX;
-                let activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
+                const distanceToViewportLeft = evt.clientX;
+                const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
+                const fexplrMinWidth = this.$store.state.config.fileExplorerOptions.minWidth;
+                const fdiplrMinWidth = this.$store.state.config.fileDisplayerOptions.minWidth;
                 let diff = distanceToViewportLeft - activityBarWidth;
-                if (diff < 170) diff = 170;
-                if (distanceToViewportLeft > window.innerWidth - 300) diff = window.innerWidth - 300 - activityBarWidth;
+                if (diff < fexplrMinWidth) diff = fexplrMinWidth;
+                if (distanceToViewportLeft > window.innerWidth - fdiplrMinWidth)
+                    diff = window.innerWidth - fdiplrMinWidth - activityBarWidth;
                 this.$refs.sash.style.left = `${diff}px`;
                 this.$refs.fexplr.$el.style.width = `${diff}px`;
                 this.$refs.fdiplr.$refs.editor.ace.resize();
             }
+        },
+        resize() {
+            // const distanceToViewportLeft = this.$refs.sash.getBoundingClientRect().left;
+            // console.log(distanceToViewportLeft);
+            // const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
+            // const fexplrMinWidth = this.$store.state.config.fileExplorerOptions.minWidth;
+            // const fdiplrMinWidth = this.$store.state.config.fileDisplayerOptions.minWidth;
+            // let diff = distanceToViewportLeft;
+            // if (distanceToViewportLeft > window.innerWidth - fdiplrMinWidth) diff = window.innerWidth - fdiplrMinWidth;
+            // if (distanceToViewportLeft < activityBarWidth + fexplrMinWidth) diff = activityBarWidth + fexplrMinWidth;
+            // this.$refs.sash.style.left = `${diff}px`;
+            // this.$refs.fexplr.$el.style.width = `${diff}px`;
+            this.$refs.fdiplr.$refs.editor.ace.resize();
         }
     },
     mounted() {
         window.addEventListener("mouseup", this.$options.methods.disableSash.bind(this));
         window.addEventListener("mousemove", this.$options.methods.slide.bind(this));
+        window.addEventListener("resize", this.$options.methods.resize.bind(this));
         this.$once("hook:beforeDestroy", () => {
             window.removeEventListener("mouseup", this.$options.methods.disableSash.bind(this));
             window.removeEventListener("mousemove", this.$options.methods.slide.bind(this));
+            window.removeEventListener("resize", this.$options.methods.resize.bind(this));
         });
     }
 };

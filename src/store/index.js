@@ -9,6 +9,9 @@ export default new Vuex.Store({
     state: {
         config: {
             lang: null,
+            activityBar: {
+                width: 48
+            },
             fileExplorerOptions: {
                 minWidth: 170,
                 itemIndentStep: 11
