@@ -1,6 +1,10 @@
 <template>
     <div id="file-displayer">
-        <ace-editor :cursor="$store.state.cursor" :commonOptions="$store.state.config.editorCommonOptions" />
+        <ace-editor
+            ref="editor"
+            :cursorStyle="$store.state.cursorStyle"
+            :commonOptions="$store.state.config.editorCommonOptions"
+        />
     </div>
 </template>
 
@@ -20,7 +24,6 @@ export default {
 #file-displayer
     position relative
 
-    width 100%
     height 100%
     box-sizing border-box
 

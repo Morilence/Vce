@@ -11,8 +11,7 @@ import exttable from "@/store/exttable";
 export default {
     name: "AceEditor",
     props: {
-        // for cursor style
-        cursor: {
+        cursorStyle: {
             type: String,
             default: "auto"
         },
@@ -23,11 +22,12 @@ export default {
     },
     data() {
         return {
-            // lock for prevent the changing of cursorPos by setValue
-            isCursorCanBeSaved: true
+            // lock for preventing the changing of cursorPos by ace.setValue()
+            isCursorPosCanBeSaved: true
         };
     },
     computed: {
+        // currentActiveItem may need to be modified, so can't be as a prop
         currentActiveItem: {
             get() {
                 return this.$store.state.currentActiveItem;
@@ -36,7 +36,7 @@ export default {
     },
     methods: {},
     watch: {
-        cursor: {
+        cursorStyle: {
             handler(newVal) {
                 switch (newVal) {
                     case "col-resize":
@@ -63,38 +63,39 @@ export default {
                 if (item != null && !item.isdir) {
                     const ext = item.name.split(".").pop();
                     this.ace.setOptions({ mode: exttable[ext].mode });
-                    this.isCursorCanBeSaved = false;
-                    if (item.content != undefined) this.ace.setValue(item.content, 1);
-                    this.isCursorCanBeSaved = true;
+                    this.isCursorPosCanBeSaved = false;
+                    if (item.content == undefined) this.$store.commit("setPropsOfCurrentActiveItem", { content: "" });
+                    this.ace.setValue(item.content, 1);
+                    this.isCursorPosCanBeSaved = true;
                     if (item.cursorPos) this.ace.moveCursorTo(item.cursorPos.row, item.cursorPos.column);
                 }
             }
         }
     },
     mounted() {
-        const _this = this;
         this.ace = Ace.edit(this.$el);
         this.ace.setOptions(this.commonOptions);
         // shortcut key bindings
         this.ace.commands.addCommand({
             name: "save",
             bindKey: { win: "Ctrl-S", mac: "Command-S" },
-            exec() {
-                _this.$store.commit("setPropsOfCurrentActiveItem", { content: _this.ace.getValue() });
-                _this.$store.commit("saveProject");
+            exec: () => {
+                this.$store.commit("setPropsOfCurrentActiveItem", { content: this.ace.getValue() });
+                this.$store.commit("saveProject");
             }
         });
         // event listeners
         this.ace.selection.on("changeCursor", () => {
-            if (this.isCursorCanBeSaved) {
+            if (this.isCursorPosCanBeSaved) {
                 const cursorPos = this.ace.selection.getCursor();
                 this.$store.commit("setPropsOfCurrentActiveItem", { cursorPos });
             }
         });
-    },
-    beforeDestroy() {
-        this.ace.destroy();
-        this.ace = null;
+        // destroy & release
+        this.$once("hook:beforeDestroy", () => {
+            this.ace.destroy();
+            this.ace = null;
+        });
     }
 };
 </script>
@@ -107,7 +108,4 @@ export default {
     box-sizing border-box
 
     user-select none
-
-    // & >>> .ace_scrollbar::-webkit-scrollbar-track
-    //     background transparent
 </style>

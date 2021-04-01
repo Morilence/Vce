@@ -13,6 +13,9 @@ export default new Vuex.Store({
                 minWidth: 170,
                 itemIndentStep: 11
             },
+            fileDisplayerOptions: {
+                minWidth: 300
+            },
             editorCommonOptions: {
                 // session options
                 tabSize: 4,
@@ -26,7 +29,7 @@ export default new Vuex.Store({
         },
         project: mock.project,
         // cursor style
-        cursor: "auto",
+        cursorStyle: "auto",
         // currentActiveItem the partial reference of project
         currentActiveItem: null
     },
@@ -41,8 +44,8 @@ export default new Vuex.Store({
         setProject(state, proj) {
             state.project = proj;
         },
-        setCursor(state, style) {
-            state.cursor = style;
+        setCursorStyle(state, style) {
+            state.cursorStyle = style;
         },
         setPropsOfCurrentActiveItem(state, obj) {
             Object.keys(obj).forEach(prop => {

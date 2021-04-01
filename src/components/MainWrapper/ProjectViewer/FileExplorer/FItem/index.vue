@@ -7,7 +7,7 @@
             class="flabel"
             :style="{
                 paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.itemIndentStep}px`,
-                pointerEvents: $store.state.cursor == 'col-resize' ? 'none' : 'auto'
+                pointerEvents: $store.state.cursorStyle == 'col-resize' ? 'none' : 'auto'
             }"
             @click="onItemClick(item)"
         >
@@ -22,7 +22,7 @@
             class="flabel"
             :style="{
                 paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.itemIndentStep}px`,
-                pointerEvents: $store.state.cursor == 'col-resize' ? 'none' : 'auto'
+                pointerEvents: $store.state.cursorStyle == 'col-resize' ? 'none' : 'auto'
             }"
             @click="onItemClick(item)"
         >

@@ -25,13 +25,13 @@ export default {
             this.isSashActivated = true;
             this.$refs.fexplr.$el.style.pointerEvents = "null";
             this.$refs.fdiplr.$el.style.pointerEvents = "null";
-            this.$store.commit("setCursor", "col-resize");
+            this.$store.commit("setCursorStyle", "col-resize");
         },
         disableSash() {
             this.isSashActivated = false;
             this.$refs.fexplr.$el.style.pointerEvents = "auto";
             this.$refs.fdiplr.$el.style.pointerEvents = "auto";
-            this.$store.commit("setCursor", "auto");
+            this.$store.commit("setCursorStyle", "auto");
         },
         slide(evt) {
             if (this.isSashActivated) {
@@ -42,6 +42,7 @@ export default {
                 if (distanceToViewportLeft > window.innerWidth - 300) diff = window.innerWidth - 300 - activityBarWidth;
                 this.$refs.sash.style.left = `${diff}px`;
                 this.$refs.fexplr.$el.style.width = `${diff}px`;
+                this.$refs.fdiplr.$refs.editor.ace.resize();
             }
         }
     },
@@ -91,6 +92,6 @@ export default {
         min-width 170px
 
     #file-displayer
-        // flex 1 0 0
+        width 100%
         min-width 300px
 </style>
