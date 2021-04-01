@@ -30,12 +30,27 @@ export default {
             if (localStorage.getItem("project") != null) {
                 this.$store.commit("setProject", JSON.parse(localStorage.getItem("project")));
             }
+        },
+        readLocalCurrentActiveItem() {
+            if (localStorage.getItem("currentActiveItem") != null) {
+                this.$store.commit("setCurrentActiveItem", JSON.parse(localStorage.getItem("currentActiveItem")));
+            }
+            if (!this.$store.state.currentActiveItem.isdir) {
+                this.$nextTick(() => {
+                    const evt = document.createEvent("HTMLEvents");
+                    evt.initEvent("click", true, true);
+                    document
+                        .querySelector(`[data-path="${this.$store.state.currentActiveItem.path}"] .flabel`)
+                        .dispatchEvent(evt);
+                });
+            }
         }
     },
     mounted() {
         // init(after all components are mounted)
         this.readLocalConfig();
         this.readLocalProject();
+        this.readLocalCurrentActiveItem();
         cssvar.set(this.$refs.app);
     }
 };

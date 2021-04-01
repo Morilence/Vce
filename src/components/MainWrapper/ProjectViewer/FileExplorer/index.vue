@@ -1,6 +1,6 @@
 <template>
     <ul id="file-explorer">
-        <f-item class="root" ref="root" :layer="0" :item="this.$store.state.project" />
+        <f-item class="root" ref="root" :layer="0" :catalog="''" :item="this.$store.state.project" />
     </ul>
 </template>
 
@@ -11,9 +11,7 @@ export default {
     data() {
         return {};
     },
-    mounted() {
-        this.$refs.root.toggleFoldedState();
-    }
+    mounted() {}
 };
 </script>
 

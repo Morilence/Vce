@@ -1,7 +1,13 @@
 <template>
     <li
         v-if="item.isdir"
-        :class="{ fitem: true, dir: true, folded: isFolded, active: item == $store.state.currentActiveItem }"
+        :class="{
+            fitem: true,
+            dir: true,
+            folded: isFolded,
+            active: item.path && path == $store.state.currentActiveItem.path
+        }"
+        :data-path="path"
     >
         <div
             class="flabel"
@@ -15,9 +21,17 @@
             <font-awesome-icon class="ficon " :icon="['fas', isFolded ? 'folder' : 'folder-open']" />
             <span class="fname">{{ item.name }}</span>
         </div>
-        <f-list :layer="layer + 1" :list="item.children" />
+        <f-list
+            :layer="layer + 1"
+            :list="item.children"
+            :catalog="`${catalog == '' ? item.name : `${catalog}/${item.name}`}`"
+        />
     </li>
-    <li v-else :class="{ fitem: true, file: true, active: item == $store.state.currentActiveItem }">
+    <li
+        v-else
+        :class="{ fitem: true, file: true, active: path && path == $store.state.currentActiveItem.path }"
+        :data-path="path"
+    >
         <div
             class="flabel"
             :style="{
@@ -42,6 +56,10 @@ export default {
             type: Number,
             default: 0
         },
+        catalog: {
+            type: String,
+            default: ""
+        },
         item: {
             type: Object,
             default() {
@@ -51,10 +69,15 @@ export default {
     },
     data() {
         return {
-            isFolded: true
+            isFolded: this.item.isfolded
         };
     },
     computed: {
+        path: {
+            get() {
+                return `${this.catalog}/${this.item.name}`;
+            }
+        },
         icon: {
             get() {
                 return fileName => {
@@ -63,11 +86,23 @@ export default {
             }
         }
     },
+    watch: {
+        item: {
+            handler(item) {
+                this.isFolded = item.isfolded;
+            }
+        }
+    },
     methods: {
         // handlers
         onItemClick(item) {
-            this.$options.methods.toggleFoldedState.bind(this)();
             this.$store.commit("setCurrentActiveItem", item);
+            this.$store.commit("setPropsOfCurrentActiveItem", { path: this.path });
+            if (item.isdir) {
+                this.$options.methods.toggleFoldedState.bind(this)();
+                this.$store.commit("setPropsOfCurrentActiveItem", { isfolded: this.isFolded });
+            }
+            this.$store.commit("save");
         },
         // public methods
         toggleFoldedState() {

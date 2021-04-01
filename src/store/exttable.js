@@ -68,6 +68,10 @@ export default {
         mode: "ace/mode/json5",
         ficon: ["fas", "file"]
     },
+    md: {
+        mode: "ace/mode/markdown",
+        ficon: ["fas", "file"]
+    },
     php: {
         mode: "ace/mode/php",
         ficon: ["fas", "file"]

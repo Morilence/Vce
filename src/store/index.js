@@ -35,29 +35,34 @@ export default new Vuex.Store({
         // cursor style
         cursorStyle: "auto",
         // currentActiveItem the partial reference of project
-        currentActiveItem: null
+        currentActiveItem: {
+            name: "readme.md",
+            path: "Untitled/readme.md",
+            isdir: false
+        }
     },
     mutations: {
         setConfig(state, cfg) {
             Object.assign(state.config, cfg);
             localStorage.setItem("config", JSON.stringify(state.config));
         },
-        saveProject(state) {
-            localStorage.setItem("project", JSON.stringify(state.project));
-        },
         setProject(state, proj) {
-            state.project = proj;
+            state.project = proj.version && proj.version >= mock.project.version ? proj : mock.project;
         },
         setCursorStyle(state, style) {
             state.cursorStyle = style;
+        },
+        setCurrentActiveItem(state, item) {
+            state.currentActiveItem = item;
         },
         setPropsOfCurrentActiveItem(state, obj) {
             Object.keys(obj).forEach(prop => {
                 state.currentActiveItem[prop] = obj[prop];
             });
         },
-        setCurrentActiveItem(state, item) {
-            state.currentActiveItem = item;
+        save(state) {
+            localStorage.setItem("project", JSON.stringify(state.project));
+            localStorage.setItem("currentActiveItem", JSON.stringify(state.currentActiveItem));
         }
     },
     actions: {},

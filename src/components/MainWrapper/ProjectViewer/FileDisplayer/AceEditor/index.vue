@@ -94,7 +94,7 @@ export default {
             bindKey: { win: "Ctrl-S", mac: "Command-S" },
             exec: () => {
                 this.$store.commit("setPropsOfCurrentActiveItem", { content: this.ace.getValue() });
-                this.$store.commit("saveProject");
+                this.$store.commit("save");
             }
         });
         // event handlers
