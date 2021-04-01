@@ -9,6 +9,7 @@ export default new Vuex.Store({
     state: {
         config: {
             lang: null,
+            minWidth: 518,
             activityBar: {
                 width: 48
             },

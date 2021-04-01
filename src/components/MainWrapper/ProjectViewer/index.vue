@@ -34,7 +34,7 @@ export default {
             this.$store.commit("setCursorStyle", "auto");
         },
         slide(evt) {
-            if (this.isSashActivated) {
+            if (this.isSashActivated && window.innerWidth > this.$store.state.config.minWidth) {
                 const distanceToViewportLeft = evt.clientX;
                 const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
                 const fexplrMinWidth = this.$store.state.config.fileExplorerOptions.minWidth;
@@ -49,16 +49,21 @@ export default {
             }
         },
         resize() {
-            // const distanceToViewportLeft = this.$refs.sash.getBoundingClientRect().left;
-            // console.log(distanceToViewportLeft);
-            // const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
-            // const fexplrMinWidth = this.$store.state.config.fileExplorerOptions.minWidth;
-            // const fdiplrMinWidth = this.$store.state.config.fileDisplayerOptions.minWidth;
-            // let diff = distanceToViewportLeft;
-            // if (distanceToViewportLeft > window.innerWidth - fdiplrMinWidth) diff = window.innerWidth - fdiplrMinWidth;
-            // if (distanceToViewportLeft < activityBarWidth + fexplrMinWidth) diff = activityBarWidth + fexplrMinWidth;
-            // this.$refs.sash.style.left = `${diff}px`;
-            // this.$refs.fexplr.$el.style.width = `${diff}px`;
+            const distanceToViewportLeft =
+                this.$refs.sash.getBoundingClientRect().left + this.$refs.sash.getBoundingClientRect().width / 2;
+            const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
+            const fexplrMinWidth = this.$store.state.config.fileExplorerOptions.minWidth;
+            const fdiplrMinWidth = this.$store.state.config.fileDisplayerOptions.minWidth;
+            let diff = distanceToViewportLeft - activityBarWidth;
+            if (
+                distanceToViewportLeft > window.innerWidth - fdiplrMinWidth &&
+                distanceToViewportLeft > activityBarWidth + fexplrMinWidth
+            ) {
+                diff = window.innerWidth - fdiplrMinWidth - activityBarWidth;
+                if (diff < fexplrMinWidth) diff = fexplrMinWidth;
+            }
+            this.$refs.sash.style.left = `${diff}px`;
+            this.$refs.fexplr.$el.style.width = `${diff}px`;
             this.$refs.fdiplr.$refs.editor.ace.resize();
         }
     },
