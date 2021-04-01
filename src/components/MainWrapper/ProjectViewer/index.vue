@@ -33,13 +33,19 @@ export default {
             this.$refs.fdiplr.$el.style.pointerEvents = "auto";
             this.$store.commit("setCursorStyle", "auto");
         },
-        changeLayout(diff, activityBarWidth) {
-            this.$refs.sash.style.left = `${diff}px`;
-            this.$refs.fexplr.$el.style.width = `${diff}px`;
+        changeLayout(fexplrWidth) {
+            const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
+            const fdiplrMinWidth = this.$store.state.config.fileDisplayerOptions.minWidth;
+            this.$refs.sash.style.left = `${fexplrWidth}px`;
+            this.$refs.fexplr.$el.style.width = `${fexplrWidth}px`;
+            let fdiplrWidth =
+                window.innerWidth - fexplrWidth - activityBarWidth < fdiplrMinWidth
+                    ? fdiplrMinWidth
+                    : window.innerWidth - fexplrWidth - activityBarWidth;
             // rounding can eliminate the scrollbar flashing
-            this.$refs.fdiplr.$el.style.width = `${Math.round(window.innerWidth - diff - activityBarWidth)}px`;
+            this.$refs.fdiplr.$el.style.width = `${Math.round(fdiplrWidth)}px`;
             this.$refs.fdiplr.$refs.editor.ace.renderer.scrollBarH.element.style.width = `${Math.round(
-                window.innerWidth - diff - activityBarWidth - this.$refs.fdiplr.$refs.editor.ace.renderer.gutterWidth
+                fdiplrWidth - this.$refs.fdiplr.$refs.editor.ace.renderer.gutterWidth
             )}px`;
             this.$nextTick(() => {
                 this.$refs.fdiplr.$refs.editor.ace.resize();
@@ -53,11 +59,11 @@ export default {
                 const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
                 const fexplrMinWidth = this.$store.state.config.fileExplorerOptions.minWidth;
                 const fdiplrMinWidth = this.$store.state.config.fileDisplayerOptions.minWidth;
-                let diff = distanceToViewportLeft - activityBarWidth;
-                if (diff < fexplrMinWidth) diff = fexplrMinWidth;
+                let fexplrWidth = distanceToViewportLeft - activityBarWidth;
+                if (fexplrWidth < fexplrMinWidth) fexplrWidth = fexplrMinWidth;
                 if (distanceToViewportLeft > window.innerWidth - fdiplrMinWidth)
-                    diff = window.innerWidth - fdiplrMinWidth - activityBarWidth;
-                this.$options.methods.changeLayout.bind(this)(diff, activityBarWidth);
+                    fexplrWidth = window.innerWidth - fdiplrMinWidth - activityBarWidth;
+                this.$options.methods.changeLayout.bind(this)(fexplrWidth);
             }
         },
         onWindowResizing() {
@@ -66,15 +72,15 @@ export default {
             const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
             const fexplrMinWidth = this.$store.state.config.fileExplorerOptions.minWidth;
             const fdiplrMinWidth = this.$store.state.config.fileDisplayerOptions.minWidth;
-            let diff = distanceToViewportLeft - activityBarWidth;
+            let fexplrWidth = distanceToViewportLeft - activityBarWidth;
             if (
                 distanceToViewportLeft > window.innerWidth - fdiplrMinWidth &&
                 distanceToViewportLeft > activityBarWidth + fexplrMinWidth
             ) {
-                diff = window.innerWidth - fdiplrMinWidth - activityBarWidth;
-                if (diff < fexplrMinWidth) diff = fexplrMinWidth;
+                fexplrWidth = window.innerWidth - fdiplrMinWidth - activityBarWidth;
+                if (fexplrWidth < fexplrMinWidth) fexplrWidth = fexplrMinWidth;
             }
-            this.$options.methods.changeLayout.bind(this)(diff, activityBarWidth);
+            this.$options.methods.changeLayout.bind(this)(fexplrWidth);
         }
     },
     mounted() {
