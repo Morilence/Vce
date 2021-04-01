@@ -5,7 +5,7 @@
             fitem: true,
             dir: true,
             folded: isFolded,
-            active: item.path && path == $store.state.currentActiveItem.path
+            active: path == $store.state.currentActiveItem.path
         }"
         :data-path="path"
     >
@@ -29,7 +29,7 @@
     </li>
     <li
         v-else
-        :class="{ fitem: true, file: true, active: path && path == $store.state.currentActiveItem.path }"
+        :class="{ fitem: true, file: true, active: path == $store.state.currentActiveItem.path }"
         :data-path="path"
     >
         <div

@@ -1,6 +1,6 @@
 export default {
     project: {
-        version: 1.03,
+        version: 1.04,
         name: "Untitled",
         isdir: true,
         isfolded: false,
