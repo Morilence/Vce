@@ -52,6 +52,9 @@ Vue.use(vuescroll, {
     }
 });
 
+// perfect-scrollbar
+import "perfect-scrollbar/css/perfect-scrollbar.css";
+
 // iview
 // import { Tabs, Tree } from "view-design";
 // import "view-design/dist/styles/iview.css";

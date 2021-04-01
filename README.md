@@ -27,6 +27,10 @@ npm i vuescroll -S
 ```
 
 ```cmd
+npm i perfect-scrollbar -S
+```
+
+```cmd
 npm i ace-builds -S
 ```
 

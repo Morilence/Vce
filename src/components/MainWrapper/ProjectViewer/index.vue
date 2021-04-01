@@ -33,7 +33,21 @@ export default {
             this.$refs.fdiplr.$el.style.pointerEvents = "auto";
             this.$store.commit("setCursorStyle", "auto");
         },
-        slide(evt) {
+        changeLayout(diff, activityBarWidth) {
+            this.$refs.sash.style.left = `${diff}px`;
+            this.$refs.fexplr.$el.style.width = `${diff}px`;
+            // rounding can eliminate the scrollbar flashing
+            this.$refs.fdiplr.$el.style.width = `${Math.round(window.innerWidth - diff - activityBarWidth)}px`;
+            this.$refs.fdiplr.$refs.editor.ace.renderer.scrollBarH.element.style.width = `${Math.round(
+                window.innerWidth - diff - activityBarWidth - this.$refs.fdiplr.$refs.editor.ace.renderer.gutterWidth
+            )}px`;
+            this.$nextTick(() => {
+                this.$refs.fdiplr.$refs.editor.ace.resize();
+                this.$refs.fdiplr.$refs.editor.contentXScroll.update();
+                this.$refs.fdiplr.$refs.editor.contentYScroll.update();
+            });
+        },
+        onSashDragging(evt) {
             if (this.isSashActivated && window.innerWidth > this.$store.state.config.minWidth) {
                 const distanceToViewportLeft = evt.clientX;
                 const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
@@ -43,12 +57,10 @@ export default {
                 if (diff < fexplrMinWidth) diff = fexplrMinWidth;
                 if (distanceToViewportLeft > window.innerWidth - fdiplrMinWidth)
                     diff = window.innerWidth - fdiplrMinWidth - activityBarWidth;
-                this.$refs.sash.style.left = `${diff}px`;
-                this.$refs.fexplr.$el.style.width = `${diff}px`;
-                this.$refs.fdiplr.$refs.editor.ace.resize();
+                this.$options.methods.changeLayout.bind(this)(diff, activityBarWidth);
             }
         },
-        resize() {
+        onWindowResizing() {
             const distanceToViewportLeft =
                 this.$refs.sash.getBoundingClientRect().left + this.$refs.sash.getBoundingClientRect().width / 2;
             const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
@@ -62,19 +74,25 @@ export default {
                 diff = window.innerWidth - fdiplrMinWidth - activityBarWidth;
                 if (diff < fexplrMinWidth) diff = fexplrMinWidth;
             }
-            this.$refs.sash.style.left = `${diff}px`;
-            this.$refs.fexplr.$el.style.width = `${diff}px`;
-            this.$refs.fdiplr.$refs.editor.ace.resize();
+            this.$options.methods.changeLayout.bind(this)(diff, activityBarWidth);
         }
     },
     mounted() {
+        // init & rounding can eliminate the scrollbar flashing
+        this.$refs.fdiplr.$el.style.width = `${Math.round(this.$refs.fdiplr.$el.getBoundingClientRect().width)}px`;
+        this.$refs.fdiplr.$refs.editor.ace.renderer.scrollBarH.element.style.width = `${Math.round(
+            this.$refs.fdiplr.$el.getBoundingClientRect().width -
+                this.$refs.fdiplr.$refs.editor.ace.renderer.gutterWidth
+        )}px`;
+
+        // global event handlers
         window.addEventListener("mouseup", this.$options.methods.disableSash.bind(this));
-        window.addEventListener("mousemove", this.$options.methods.slide.bind(this));
-        window.addEventListener("resize", this.$options.methods.resize.bind(this));
+        window.addEventListener("mousemove", this.$options.methods.onSashDragging.bind(this));
+        window.addEventListener("resize", this.$options.methods.onWindowResizing.bind(this));
         this.$once("hook:beforeDestroy", () => {
             window.removeEventListener("mouseup", this.$options.methods.disableSash.bind(this));
-            window.removeEventListener("mousemove", this.$options.methods.slide.bind(this));
-            window.removeEventListener("resize", this.$options.methods.resize.bind(this));
+            window.removeEventListener("mousemove", this.$options.methods.onSashDragging.bind(this));
+            window.removeEventListener("resize", this.$options.methods.onWindowResizing.bind(this));
         });
     }
 };

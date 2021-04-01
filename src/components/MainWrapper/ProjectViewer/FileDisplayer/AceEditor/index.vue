@@ -7,6 +7,7 @@
 import Ace from "ace-builds";
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/ext-language_tools";
+import PerfectScrollbar from "perfect-scrollbar";
 import exttable from "@/store/exttable";
 export default {
     name: "AceEditor",
@@ -34,7 +35,6 @@ export default {
             }
         }
     },
-    methods: {},
     watch: {
         cursorStyle: {
             handler(newVal) {
@@ -68,6 +68,10 @@ export default {
                     this.ace.setValue(item.content, 1);
                     this.isCursorPosCanBeSaved = true;
                     if (item.cursorPos) this.ace.moveCursorTo(item.cursorPos.row, item.cursorPos.column);
+                    setTimeout(() => {
+                        this.contentXScroll.update();
+                        this.contentYScroll.update();
+                    }, 0);
                 }
             }
         }
@@ -75,6 +79,15 @@ export default {
     mounted() {
         this.ace = Ace.edit(this.$el);
         this.ace.setOptions(this.commonOptions);
+        this.contentXScroll = new PerfectScrollbar(this.ace.renderer.scrollBarH.element, {
+            wheelPropagation: false,
+            suppressScrollY: true
+        });
+        this.contentYScroll = new PerfectScrollbar(this.ace.renderer.scrollBarV.element, {
+            wheelPropagation: false,
+            suppressScrollX: true
+        });
+
         // shortcut key bindings
         this.ace.commands.addCommand({
             name: "save",
@@ -84,7 +97,7 @@ export default {
                 this.$store.commit("saveProject");
             }
         });
-        // event listeners
+        // event handlers
         this.ace.selection.on("changeCursor", () => {
             if (this.isCursorPosCanBeSaved) {
                 const cursorPos = this.ace.selection.getCursor();
@@ -93,6 +106,10 @@ export default {
         });
         // destroy & release
         this.$once("hook:beforeDestroy", () => {
+            this.contentXScroll.destroy();
+            this.contentXScroll = null;
+            this.contentYScroll.destroy();
+            this.contentYScroll = null;
             this.ace.destroy();
             this.ace = null;
         });
@@ -108,4 +125,36 @@ export default {
     box-sizing border-box
 
     user-select none
+
+    & >>> .ps,
+    & >>> .ps:hover
+        [class*="ps__rail"],
+        [class*="ps__rail"]:hover,
+        [class*="ps__rail"]:focus,
+        [class*="ps__rail"].ps--clicking
+            background-color rgba(100, 100, 100, 0.05)
+            opacity 0.9
+
+        [class*="ps__thumb"]
+            border-radius 0px
+            background-color #ccc
+            opacity 0.2
+            transition opacity 0.3s
+
+        &[class*="ps--scrolling"] [class*="ps__thumb"],
+        [class*="ps__rail"]:hover [class*="ps__thumb"],
+        [class*="ps__rail"].ps--clicking [class*="ps__thumb"]
+            border-radius 0px
+            background-color #ccc
+            opacity 0.6
+
+        [class*="ps__thumb-x"],
+        [class*="ps__rail"]:hover [class*="ps__thumb-x"],
+        [class*="ps__rail"].ps--clicking [class*="ps__thumb-x"]
+            height 10.5px
+
+        [class*="ps__thumb-y"],
+        [class*="ps__rail"]:hover [class*="ps__thumb-y"],
+        [class*="ps__rail"].ps--clicking [class*="ps__thumb-y"]
+            width 10.5px
 </style>
