@@ -12,6 +12,6 @@ export default {
 #activity-bar
     flex-shrink 0
 
-    width 48px
+    width var(--activity_bar_width)
     height 100%
 </style>

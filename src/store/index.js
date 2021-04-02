@@ -11,6 +11,12 @@ export default new Vuex.Store({
         config: {
             lang: null,
             minWidth: 718,
+            titleBar: {
+                height: 30
+            },
+            statusBar: {
+                height: 22
+            },
             activityBar: {
                 width: 48
             },

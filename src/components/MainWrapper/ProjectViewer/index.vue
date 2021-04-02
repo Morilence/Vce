@@ -139,9 +139,9 @@ export default {
     #file-explorer
         flex-shrink 0
         width 200px
-        min-width @css{var(--fexplr_min_width)}
+        min-width var(--fexplr_min_width)
 
     #file-displayer
         width 100%
-        min-width @css{var(--fdiplr_min_width)}
+        min-width var(--fdiplr_min_width)
 </style>

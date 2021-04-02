@@ -63,11 +63,15 @@ export default {
         }
     },
     mounted() {
-        // init(after all components are mounted)
+        // init (after all components are mounted)
         this.readLocalConfig();
         this.readLocalProject();
         this.readLocalCurrentActiveItem();
+        // rerender
         cssvar.set(this.$refs.app, {
+            title_bar_height: `${this.CONFIG.titleBar.height}px`,
+            status_bar_height: `${this.CONFIG.statusBar.height}px`,
+            activity_bar_width: `${this.CONFIG.activityBar.width}px`,
             app_min_width: `${this.CONFIG.minWidth}px`,
             fexplr_min_width: `${this.CONFIG.fileExplorerOptions.minWidth}px`,
             fdiplr_min_width: `${this.CONFIG.fileDisplayerOptions.minWidth}px`
@@ -86,12 +90,12 @@ body
 
 #app
     display grid
-    grid-template-rows: 30px 1fr 22px
+    grid-template-rows: var(--title_bar_height) 1fr var(--status_bar_height)
 
     position relative
 
     width 100vw
-    min-width @css{var(--app_min_width)}
+    min-width var(--app_min_width)
     height 100vh
     min-height 480px
     box-sizing border-box
