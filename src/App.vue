@@ -2,7 +2,7 @@
     <vue-scroll>
         <div id="app" ref="app" :style="{ cursor: $store.state.cursorStyle }">
             <title-bar />
-            <main-wrapper />
+            <main-wrapper ref="mwrapper" />
             <status-bar />
         </div>
     </vue-scroll>
@@ -20,10 +20,26 @@ export default {
         MainWrapper,
         StatusBar
     },
+    computed: {
+        CONFIG: {
+            get() {
+                return this.$store.state.config;
+            }
+        }
+    },
     methods: {
+        // refresh the whole app to apply the new state's change.
+        refresh() {
+            const ProjectViewer = this.$refs.mwrapper.$refs.projviewer;
+            this.$nextTick(() => {
+                ProjectViewer.adjustLayout(this.CONFIG.fileExplorerOptions.initialWidth);
+            });
+        },
         readLocalConfig() {
             if (localStorage.getItem("config") != null) {
-                this.$store.commit("setConfig", JSON.parse(localStorage.getItem("config")));
+                const config = JSON.parse(localStorage.getItem("config"));
+                this.$store.commit("setConfig", config);
+                // this.$store.commit("setFileExplorerOptions", config.fileExplorerOptions);
             }
         },
         readLocalProject() {
@@ -51,7 +67,12 @@ export default {
         this.readLocalConfig();
         this.readLocalProject();
         this.readLocalCurrentActiveItem();
-        cssvar.set(this.$refs.app);
+        cssvar.set(this.$refs.app, {
+            app_min_width: `${this.CONFIG.minWidth}px`,
+            fexplr_min_width: `${this.CONFIG.fileExplorerOptions.minWidth}px`,
+            fdiplr_min_width: `${this.CONFIG.fileDisplayerOptions.minWidth}px`
+        });
+        this.refresh();
     }
 };
 </script>
@@ -70,7 +91,7 @@ body
     position relative
 
     width 100vw
-    min-width 518px
+    min-width @css{var(--app_min_width)}
     height 100vh
     min-height 480px
     box-sizing border-box

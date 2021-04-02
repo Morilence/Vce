@@ -12,7 +12,7 @@
         <div
             class="flabel"
             :style="{
-                paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.itemIndentStep}px`,
+                paddingLeft: `${(layer + 1) * CONFIG.fileExplorerOptions.itemIndentStep}px`,
                 pointerEvents: $store.state.cursorStyle == 'col-resize' ? 'none' : 'auto'
             }"
             @click="onItemClick(item)"
@@ -35,7 +35,7 @@
         <div
             class="flabel"
             :style="{
-                paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.itemIndentStep}px`,
+                paddingLeft: `${(layer + 1) * CONFIG.fileExplorerOptions.itemIndentStep}px`,
                 pointerEvents: $store.state.cursorStyle == 'col-resize' ? 'none' : 'auto'
             }"
             @click="onItemClick(item)"
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import exttable from "@/store/exttable";
+import ext from "@/store/ext";
 export default {
     name: "fitem",
     props: {
@@ -73,6 +73,11 @@ export default {
         };
     },
     computed: {
+        CONFIG: {
+            get() {
+                return this.$store.state.config;
+            }
+        },
         path: {
             get() {
                 return `${this.catalog}/${this.item.name}`;
@@ -80,8 +85,8 @@ export default {
         },
         icon: {
             get() {
-                return fileName => {
-                    return exttable[fileName.split(".").pop()].ficon;
+                return name => {
+                    return ext.table[ext.extname(name)].ficon;
                 };
             }
         }
@@ -102,7 +107,8 @@ export default {
                 this.$options.methods.toggleFoldedState.bind(this)();
                 this.$store.commit("setPropsOfCurrentActiveItem", { isfolded: this.isFolded });
             }
-            this.$store.commit("save");
+            this.$store.commit("saveCurrentActiveItem");
+            this.$store.commit("saveProject");
         },
         // public methods
         toggleFoldedState() {
@@ -125,7 +131,7 @@ export default {
         align-items center
 
         padding 4.5px 0 4.5px 5px
-        transition background-color 0.2s
+        // transition background-color 0.1s
         cursor pointer
 
         .farrow

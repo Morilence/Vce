@@ -1,7 +1,7 @@
 <template>
     <div id="main-wrapper">
         <activity-bar ref="activbar" />
-        <project-viewer />
+        <project-viewer ref="projviewer" />
     </div>
 </template>
 

@@ -7,18 +7,20 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        // default
         config: {
             lang: null,
-            minWidth: 518,
+            minWidth: 718,
             activityBar: {
                 width: 48
             },
             fileExplorerOptions: {
+                initialWidth: 200,
                 minWidth: 170,
                 itemIndentStep: 11
             },
             fileDisplayerOptions: {
-                minWidth: 300
+                minWidth: 500
             },
             editorCommonOptions: {
                 // session options
@@ -44,7 +46,9 @@ export default new Vuex.Store({
     mutations: {
         setConfig(state, cfg) {
             Object.assign(state.config, cfg);
-            localStorage.setItem("config", JSON.stringify(state.config));
+        },
+        setFileExplorerOptions(state, opt) {
+            Object.assign(state.config.fileExplorerOptions, opt);
         },
         setProject(state, proj) {
             state.project = proj.version && proj.version >= mock.project.version ? proj : mock.project;
@@ -60,8 +64,19 @@ export default new Vuex.Store({
                 state.currentActiveItem[prop] = obj[prop];
             });
         },
+        // save
         save(state) {
+            localStorage.setItem("config", JSON.stringify(state.config));
             localStorage.setItem("project", JSON.stringify(state.project));
+            localStorage.setItem("currentActiveItem", JSON.stringify(state.currentActiveItem));
+        },
+        saveConfig(state) {
+            localStorage.setItem("config", JSON.stringify(state.config));
+        },
+        saveProject(state) {
+            localStorage.setItem("project", JSON.stringify(state.project));
+        },
+        saveCurrentActiveItem(state) {
             localStorage.setItem("currentActiveItem", JSON.stringify(state.currentActiveItem));
         }
     },

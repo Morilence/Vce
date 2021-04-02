@@ -20,6 +20,13 @@ export default {
             isSashActivated: false
         };
     },
+    computed: {
+        CONFIG: {
+            get() {
+                return this.$store.state.config;
+            }
+        }
+    },
     methods: {
         enableSash() {
             this.isSashActivated = true;
@@ -33,9 +40,10 @@ export default {
             this.$refs.fdiplr.$el.style.pointerEvents = "auto";
             this.$store.commit("setCursorStyle", "auto");
         },
-        changeLayout(fexplrWidth) {
+        // adjust layout by the width of FileExplorer
+        adjustLayout(fexplrWidth) {
             const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
-            const fdiplrMinWidth = this.$store.state.config.fileDisplayerOptions.minWidth;
+            const fdiplrMinWidth = this.CONFIG.fileDisplayerOptions.minWidth;
             this.$refs.sash.style.left = `${fexplrWidth}px`;
             this.$refs.fexplr.$el.style.width = `${fexplrWidth}px`;
             let fdiplrWidth =
@@ -47,6 +55,8 @@ export default {
             this.$refs.fdiplr.$refs.editor.ace.renderer.scrollBarH.element.style.width = `${Math.round(
                 fdiplrWidth - this.$refs.fdiplr.$refs.editor.ace.renderer.gutterWidth
             )}px`;
+            this.$store.commit("setFileExplorerOptions", { initialWidth: fexplrWidth });
+            this.$store.commit("saveConfig");
             this.$nextTick(() => {
                 this.$refs.fdiplr.$refs.editor.ace.resize();
                 this.$refs.fdiplr.$refs.editor.contentXScroll.update();
@@ -54,24 +64,24 @@ export default {
             });
         },
         onSashDragging(evt) {
-            if (this.isSashActivated && window.innerWidth > this.$store.state.config.minWidth) {
+            if (this.isSashActivated && window.innerWidth > this.CONFIG.minWidth) {
                 const distanceToViewportLeft = evt.clientX;
                 const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
-                const fexplrMinWidth = this.$store.state.config.fileExplorerOptions.minWidth;
-                const fdiplrMinWidth = this.$store.state.config.fileDisplayerOptions.minWidth;
+                const fexplrMinWidth = this.CONFIG.fileExplorerOptions.minWidth;
+                const fdiplrMinWidth = this.CONFIG.fileDisplayerOptions.minWidth;
                 let fexplrWidth = distanceToViewportLeft - activityBarWidth;
                 if (fexplrWidth < fexplrMinWidth) fexplrWidth = fexplrMinWidth;
                 if (distanceToViewportLeft > window.innerWidth - fdiplrMinWidth)
                     fexplrWidth = window.innerWidth - fdiplrMinWidth - activityBarWidth;
-                this.$options.methods.changeLayout.bind(this)(fexplrWidth);
+                this.$options.methods.adjustLayout.bind(this)(fexplrWidth);
             }
         },
         onWindowResizing() {
             const distanceToViewportLeft =
                 this.$refs.sash.getBoundingClientRect().left + this.$refs.sash.getBoundingClientRect().width / 2;
             const activityBarWidth = this.$parent.$refs.activbar.$el.getBoundingClientRect().width;
-            const fexplrMinWidth = this.$store.state.config.fileExplorerOptions.minWidth;
-            const fdiplrMinWidth = this.$store.state.config.fileDisplayerOptions.minWidth;
+            const fexplrMinWidth = this.CONFIG.fileExplorerOptions.minWidth;
+            const fdiplrMinWidth = this.CONFIG.fileDisplayerOptions.minWidth;
             let fexplrWidth = distanceToViewportLeft - activityBarWidth;
             if (
                 distanceToViewportLeft > window.innerWidth - fdiplrMinWidth &&
@@ -80,17 +90,10 @@ export default {
                 fexplrWidth = window.innerWidth - fdiplrMinWidth - activityBarWidth;
                 if (fexplrWidth < fexplrMinWidth) fexplrWidth = fexplrMinWidth;
             }
-            this.$options.methods.changeLayout.bind(this)(fexplrWidth);
+            this.$options.methods.adjustLayout.bind(this)(fexplrWidth);
         }
     },
     mounted() {
-        // init & rounding can eliminate the scrollbar flashing
-        this.$refs.fdiplr.$el.style.width = `${Math.round(this.$refs.fdiplr.$el.getBoundingClientRect().width)}px`;
-        this.$refs.fdiplr.$refs.editor.ace.renderer.scrollBarH.element.style.width = `${Math.round(
-            this.$refs.fdiplr.$el.getBoundingClientRect().width -
-                this.$refs.fdiplr.$refs.editor.ace.renderer.gutterWidth
-        )}px`;
-
         // global event handlers
         window.addEventListener("mouseup", this.$options.methods.disableSash.bind(this));
         window.addEventListener("mousemove", this.$options.methods.onSashDragging.bind(this));
@@ -136,9 +139,9 @@ export default {
     #file-explorer
         flex-shrink 0
         width 200px
-        min-width 170px
+        min-width @css{var(--fexplr_min_width)}
 
     #file-displayer
         width 100%
-        min-width 300px
+        min-width @css{var(--fdiplr_min_width)}
 </style>

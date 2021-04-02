@@ -8,7 +8,7 @@ import Ace from "ace-builds";
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/ext-language_tools";
 import PerfectScrollbar from "perfect-scrollbar";
-import exttable from "@/store/exttable";
+import ext from "@/store/ext";
 export default {
     name: "AceEditor",
     props: {
@@ -61,8 +61,7 @@ export default {
         currentActiveItem: {
             handler(item) {
                 if (item != null && !item.isdir) {
-                    const ext = item.name.split(".").pop();
-                    this.ace.setOptions({ mode: exttable[ext].mode });
+                    this.ace.setOptions({ mode: ext.table[ext.extname(item.name)].mode });
                     this.isCursorPosCanBeSaved = false;
                     if (item.content == undefined) this.$store.commit("setPropsOfCurrentActiveItem", { content: "" });
                     this.ace.setValue(item.content, 1);
@@ -94,7 +93,8 @@ export default {
             bindKey: { win: "Ctrl-S", mac: "Command-S" },
             exec: () => {
                 this.$store.commit("setPropsOfCurrentActiveItem", { content: this.ace.getValue() });
-                this.$store.commit("save");
+                this.$store.commit("saveCurrentActiveItem");
+                this.$store.commit("saveProject");
             }
         });
         // event handlers
