@@ -131,7 +131,7 @@ export default {
 
         cursor col-resize
         user-select none
-        z-index 10
+        z-index 12
 
         &.active
             background-color rgba(0, 122, 204, 0.8)
