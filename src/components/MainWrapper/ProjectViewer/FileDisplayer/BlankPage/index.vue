@@ -35,7 +35,7 @@ export default {
     background-color rgb(240, 240, 240)
 
     opacity 0
-    transition opacity 0.3s
+    // transition opacity 0.3s
     z-index -1
 
     &.show

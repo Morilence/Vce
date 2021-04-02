@@ -36,7 +36,7 @@ export default new Vuex.Store({
         project: mock.project,
         // cursor style
         cursorStyle: "auto",
-        // currentActiveItem the partial reference of project
+        // currentActiveItem is a partial reference to the project
         currentActiveItem: {
             name: "readme.md",
             path: "Untitled/readme.md",

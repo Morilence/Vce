@@ -80,7 +80,7 @@ export default {
         },
         path: {
             get() {
-                return `${this.catalog}/${this.item.name}`;
+                return this.catalog ? `${this.catalog}/${this.item.name}` : this.item.name;
             }
         },
         icon: {
@@ -162,7 +162,7 @@ export default {
             font-size 14px
 
         &:hover
-            background-color rgba(255, 255, 255, 0.45)
+            background-color rgba(255, 255, 255, 0.4)
 
     &.dir.folded
         .farrow
