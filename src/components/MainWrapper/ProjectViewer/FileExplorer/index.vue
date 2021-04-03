@@ -19,15 +19,8 @@ export default {
                 const itemElem = evt.target.parentNode;
                 // reference of target in $store.state.project
                 const item = search.findItemByPath(itemElem.dataset.path, this.$store.state.project);
-                item.path = itemElem.dataset.path;
                 if (item.isdir) {
-                    if (itemElem.classList.contains("folded")) {
-                        itemElem.classList.remove("folded");
-                        item.isfolded = false;
-                    } else {
-                        itemElem.classList.add("folded");
-                        item.isfolded = true;
-                    }
+                    item.isfolded = !item.isfolded;
                 }
                 this.$store.commit("setCurrentActiveItem", item);
                 this.$store.commit("saveCurrentActiveItem");
@@ -36,8 +29,7 @@ export default {
         },
         onContextMenu(evt) {
             if (evt.target.classList.contains("flabel")) {
-                const itemElem = evt.target.parentNode;
-                console.log(itemElem);
+                // const itemElem = evt.target.parentNode;
             }
         }
     },

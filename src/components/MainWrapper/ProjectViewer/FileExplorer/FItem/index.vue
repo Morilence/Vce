@@ -79,6 +79,9 @@ export default {
                 };
             }
         }
+    },
+    mounted() {
+        this.item.path = this.path;
     }
 };
 </script>
