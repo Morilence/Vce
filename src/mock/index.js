@@ -1,6 +1,6 @@
 export default {
     project: {
-        version: 1.04,
+        version: 1.05,
         name: "Untitled",
         isdir: true,
         isfolded: false,
@@ -125,7 +125,7 @@ function logger (evt) {
                 ]
             },
             {
-                name: "current files/dirs are all static.txt",
+                name: "current files&dirs are all static.txt",
                 isdir: false,
                 content: "Just as the name says, but you can save your changes by Ctrl+S."
             },

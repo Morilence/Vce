@@ -1,15 +1,45 @@
 <template>
-    <ul id="file-explorer">
+    <ul id="file-explorer" @click="onClick($event)" @contextmenu.prevent="onContextMenu($event)">
         <f-item class="root" ref="root" :layer="0" :catalog="''" :item="this.$store.state.project" />
     </ul>
 </template>
 
 <script>
 // FList & FItem were registered in global(main.js).
+import search from "@/store/search";
 export default {
     name: "FileExplorer",
     data() {
         return {};
+    },
+    methods: {
+        // use event delegation to reduce memory consumption
+        onClick(evt) {
+            if (evt.target.classList.contains("flabel")) {
+                const itemElem = evt.target.parentNode;
+                // reference of target in $store.state.project
+                const item = search.findItemByPath(itemElem.dataset.path, this.$store.state.project);
+                item.path = itemElem.dataset.path;
+                if (item.isdir) {
+                    if (itemElem.classList.contains("folded")) {
+                        itemElem.classList.remove("folded");
+                        item.isfolded = false;
+                    } else {
+                        itemElem.classList.add("folded");
+                        item.isfolded = true;
+                    }
+                }
+                this.$store.commit("setCurrentActiveItem", item);
+                this.$store.commit("saveCurrentActiveItem");
+                this.$store.commit("saveProject");
+            }
+        },
+        onContextMenu(evt) {
+            if (evt.target.classList.contains("flabel")) {
+                const itemElem = evt.target.parentNode;
+                console.log(itemElem);
+            }
+        }
     },
     mounted() {}
 };

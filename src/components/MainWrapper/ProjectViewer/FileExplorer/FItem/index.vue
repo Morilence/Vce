@@ -3,22 +3,21 @@
         v-if="item.isdir"
         :class="{
             fitem: true,
-            dir: true,
-            folded: isFolded,
+            folded: item.isfolded,
             active: path == $store.state.currentActiveItem.path
         }"
         :data-path="path"
+        :data-type="'directory'"
     >
         <div
             class="flabel"
             :style="{
-                paddingLeft: `${(layer + 1) * CONFIG.fileExplorerOptions.itemIndentStep}px`,
+                paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.itemIndentStep}px`,
                 pointerEvents: $store.state.cursorStyle == 'col-resize' ? 'none' : 'auto'
             }"
-            @click="onItemClick(item)"
         >
             <font-awesome-icon class="farrow" :icon="['fas', 'caret-right']" />
-            <font-awesome-icon class="ficon " :icon="['fas', isFolded ? 'folder' : 'folder-open']" />
+            <font-awesome-icon class="ficon" :icon="['fas', item.isfolded ? 'folder' : 'folder-open']" />
             <span class="fname">{{ item.name }}</span>
         </div>
         <f-list
@@ -29,19 +28,19 @@
     </li>
     <li
         v-else
-        :class="{ fitem: true, file: true, active: path == $store.state.currentActiveItem.path }"
+        :class="{ fitem: true, active: path == $store.state.currentActiveItem.path }"
         :data-path="path"
+        :data-type="'file'"
     >
         <div
             class="flabel"
             :style="{
-                paddingLeft: `${(layer + 1) * CONFIG.fileExplorerOptions.itemIndentStep}px`,
+                paddingLeft: `${(layer + 1) * $store.state.config.fileExplorerOptions.itemIndentStep}px`,
                 pointerEvents: $store.state.cursorStyle == 'col-resize' ? 'none' : 'auto'
             }"
-            @click="onItemClick(item)"
         >
             <span class="farrow"></span>
-            <font-awesome-icon class="ficon " :icon="icon(item.name)" />
+            <font-awesome-icon class="ficon" :icon="icon(item.name)" />
             <span class="fname">{{ item.name }}</span>
         </div>
     </li>
@@ -67,17 +66,7 @@ export default {
             }
         }
     },
-    data() {
-        return {
-            isFolded: this.item.isfolded
-        };
-    },
     computed: {
-        CONFIG: {
-            get() {
-                return this.$store.state.config;
-            }
-        },
         path: {
             get() {
                 return this.catalog ? `${this.catalog}/${this.item.name}` : this.item.name;
@@ -86,33 +75,9 @@ export default {
         icon: {
             get() {
                 return name => {
-                    return ext.table[ext.extname(name)].ficon;
+                    return ext.table[ext.extname(name)] ? ext.table[ext.extname(name)].ficon : ["fas", "file"];
                 };
             }
-        }
-    },
-    watch: {
-        item: {
-            handler(item) {
-                this.isFolded = item.isfolded;
-            }
-        }
-    },
-    methods: {
-        // handlers
-        onItemClick(item) {
-            this.$store.commit("setCurrentActiveItem", item);
-            this.$store.commit("setPropsOfCurrentActiveItem", { path: this.path });
-            if (item.isdir) {
-                this.$options.methods.toggleFoldedState.bind(this)();
-                this.$store.commit("setPropsOfCurrentActiveItem", { isfolded: this.isFolded });
-            }
-            this.$store.commit("saveCurrentActiveItem");
-            this.$store.commit("saveProject");
-        },
-        // public methods
-        toggleFoldedState() {
-            this.isFolded = !this.isFolded;
         }
     }
 };
@@ -145,6 +110,8 @@ export default {
             transform rotate(90deg)
             transition transform 0.1s
 
+            pointer-events none
+
         .ficon
             width 16.5px
             min-width 16.5px
@@ -154,17 +121,20 @@ export default {
 
             font-size 14px
 
+            pointer-events none
+
             &[data-icon="folder-open"]
                 padding-left 1px
                 font-size 15.5px
 
         .fname
             font-size 14px
+            pointer-events none
 
         &:hover
             background-color rgba(255, 255, 255, 0.4)
 
-    &.dir.folded
+    &[data-type="directory"].folded
         .farrow
             transform rotate(0deg)
 
