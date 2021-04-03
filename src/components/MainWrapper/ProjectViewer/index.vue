@@ -95,13 +95,13 @@ export default {
     },
     mounted() {
         // global event handlers
-        window.addEventListener("mouseup", this.$options.methods.disableSash.bind(this));
-        window.addEventListener("mousemove", this.$options.methods.onSashDragging.bind(this));
-        window.addEventListener("resize", this.$options.methods.onWindowResizing.bind(this));
+        window.addEventListener("mouseup", this.disableSash.bind(this));
+        window.addEventListener("mousemove", this.onSashDragging.bind(this));
+        window.addEventListener("resize", this.onWindowResizing.bind(this));
         this.$once("hook:beforeDestroy", () => {
-            window.removeEventListener("mouseup", this.$options.methods.disableSash.bind(this));
-            window.removeEventListener("mousemove", this.$options.methods.onSashDragging.bind(this));
-            window.removeEventListener("resize", this.$options.methods.onWindowResizing.bind(this));
+            window.removeEventListener("mouseup", this.disableSash.bind(this));
+            window.removeEventListener("mousemove", this.onSashDragging.bind(this));
+            window.removeEventListener("resize", this.onWindowResizing.bind(this));
         });
     }
 };
