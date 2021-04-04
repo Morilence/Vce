@@ -6,7 +6,7 @@
 
 <script>
 // FList & FItem were registered in global(main.js).
-import search from "@/store/search";
+import ops from "@/store/ops";
 export default {
     name: "FileExplorer",
     data() {
@@ -18,7 +18,7 @@ export default {
             if (evt.target.classList.contains("flabel")) {
                 const itemElem = evt.target.parentNode;
                 // reference of target in $store.state.project
-                const item = search.findItemByPath(itemElem.dataset.path, this.$store.state.project);
+                const item = ops.findItemByPath(itemElem.dataset.path, this.$store.state.project);
                 if (item.isdir) {
                     item.isfolded = !item.isfolded;
                 }
